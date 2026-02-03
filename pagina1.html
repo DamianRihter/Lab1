@@ -1,131 +1,467 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Produse Apple</title>
+
+  <style>
+    :root{
+      --bg:#0b0f1a;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.09);
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --muted2: rgba(255,255,255,.60);
+      --accent:#7c5cff;
+      --accent2:#2dd4bf;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 22px;
+      --max: 1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans";
+      color:var(--text);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(124,92,255,.33), transparent 55%),
+        radial-gradient(1000px 600px at 85% 0%, rgba(45,212,191,.20), transparent 55%),
+        radial-gradient(900px 600px at 50% 100%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(180deg, #070a12, #0b0f1a 55%, #060814);
+      line-height:1.65;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; display:block; }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(14px);
+      background: rgba(11,15,26,.55);
+      border-bottom:1px solid var(--stroke);
+    }
+    .topbar .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:850;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:34px;height:34px;border-radius:12px;
+      background: linear-gradient(135deg, rgba(124,92,255,1), rgba(45,212,191,1));
+      box-shadow: 0 12px 28px rgba(124,92,255,.22);
+    }
+    .nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color:var(--muted);
+      font-size:14px;
+      transition:.2s ease;
+    }
+    .pill:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+    }
+
+    .container{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:26px 18px 46px;
+    }
+
+    .hero{
+      border:1px solid var(--stroke);
+      border-radius: var(--radius2);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(820px 360px at 20% 20%, rgba(124,92,255,.22), transparent 55%),
+        radial-gradient(720px 340px at 90% 10%, rgba(45,212,191,.16), transparent 55%);
+      pointer-events:none;
+    }
+    .hero > *{ position:relative; }
+
+    .heroTop{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .hero h1{
+      margin:0 0 8px;
+      font-size: clamp(28px, 3.6vw, 44px);
+      line-height:1.12;
+      letter-spacing:-.6px;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width: 75ch;
+    }
+
+    .badges{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:99px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 3px rgba(124,92,255,.18);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:16px;
+    }
+    .product{
+      grid-column: span 12;
+      border-radius: var(--radius2);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 320px;
+    }
+    .product:nth-child(even){
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .media{
+      background: rgba(255,255,255,.03);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+    .media .imgFrame{
+      width:100%;
+      height: 270px;
+      border-radius: 18px;
+      border: 1px solid var(--stroke);
+      overflow:hidden;
+      background: rgba(0,0,0,.20);
+    }
+    .media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    .body{
+      padding:18px 18px 16px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:10px;
+    }
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-size:13px;
+      color:var(--muted2);
+      letter-spacing:.3px;
+      text-transform:uppercase;
+    }
+    .kicker .line{
+      height:1px;
+      width:34px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      opacity:.9;
+    }
+    .body h2{
+      margin:0;
+      font-size: clamp(20px, 2.4vw, 30px);
+      line-height:1.15;
+      letter-spacing:-.4px;
+    }
+    .body p{
+      margin:0;
+      color:var(--muted);
+    }
+    .body ul{
+      margin:8px 0 0 18px;
+      padding:0;
+      color: var(--muted);
+    }
+    .body li{ margin:8px 0; }
+
+    .divider{
+      height:1px;
+      margin:22px 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+      border:0;
+    }
+
+    .footerNav{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 16px;
+      border:1px solid var(--stroke);
+      border-radius: var(--radius2);
+      background: linear-gradient(90deg, rgba(124,92,255,.14), rgba(45,212,191,.10));
+    }
+    .footerNav .note{
+      margin:0;
+      color: var(--text);
+      font-weight:650;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      color:var(--text);
+      font-weight:750;
+      transition:.2s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(0,0,0,.28);
+    }
+
+    @media (max-width: 920px){
+      .nav{ display:none; }
+      .product{ grid-template-columns: 1fr; }
+      .media .imgFrame{ height: 230px; }
+    }
+  </style>
 </head>
+
 <body>
-
-<h1 style="text-align:center;">Produse Apple</h1>
-<p style="text-align:center;">
-iPhone • iPad • MacBook • Apple Watch<br>
-Dispozitive moderne create pentru performanță, productivitate și integrare perfectă în ecosistemul Apple.
-</p>
-
-<div style="display:flex; justify-content:center;">
-  <div style="width:85%;">
-
-    <div style="display:flex; align-items:center; justify-content:center; gap:25px; margin:25px 0;">
-      <img src="Imagini/1.jpg" alt="iPhone" width="200">
-      <div>
-        <h2>iPhone</h2>
-        <p>
-        Smartphone Apple cu sistem de operare iOS, cunoscut pentru performanță ridicată,
-        securitate avansată și experiență de utilizare fluidă.
-        </p>
-        <p>
-        iPhone este ideal pentru utilizatori care apreciază calitatea camerei,
-        actualizările software pe termen lung și integrarea cu alte produse Apple.
-        </p>
-        <ul>
-          <li>Exemple: iPhone 12 / 13 / 14 / 15</li>
-          <li>Puncte forte: cameră avansată, performanță ridicată, iOS stabil</li>
-          <li>Actualizări regulate de securitate și funcționalitate</li>
-          <li>Compatibilitate cu Apple Watch, AirPods, Mac și iPad</li>
-        </ul>
-        <p>
-        iPhone este potrivit atât pentru uz personal, cât și profesional,
-        fiind unul dintre cele mai populare smartphone-uri din lume.
-        </p>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>Produse Apple</div>
       </div>
+
+      <nav class="nav" aria-label="Navigare">
+        <a class="pill" href="#iphone">iPhone</a>
+        <a class="pill" href="#ipad">iPad</a>
+        <a class="pill" href="#macbook">MacBook</a>
+        <a class="pill" href="#watch">Apple Watch</a>
+        <a class="pill" href="#final">Navigare</a>
+      </nav>
     </div>
+  </header>
 
-    <hr>
+  <main class="container">
+    <section class="hero">
+      <div class="heroTop">
+        <div>
+          <h1>Produse Apple</h1>
+          <p>
+            iPhone • iPad • MacBook • Apple Watch<br>
+            Dispozitive moderne create pentru performanță, productivitate și integrare perfectă în ecosistemul Apple.
+          </p>
 
-    <div style="display:flex; align-items:center; justify-content:center; gap:25px; margin:25px 0;">
-      <img src="Imagini/2.jpg" alt="iPad" width="200">
-      <div>
-        <h2>iPad</h2>
-        <p>
-        Tableta Apple concepută pentru studiu, muncă și divertisment,
-        oferind un echilibru excelent între performanță și portabilitate.
-        </p>
-        <p>
-        iPad este utilizat frecvent în educație, design, business și divertisment,
-        fiind compatibil cu Apple Pencil și tastaturi dedicate.
-        </p>
-        <ul>
-          <li>Exemple: iPad (10th gen), iPad mini, iPad Air, iPad Pro</li>
-          <li>Puncte forte: ecran de calitate, aplicații optimizate, portabilitate</li>
-          <li>Suport pentru Apple Pencil și multitasking</li>
-          <li>Ideal pentru citit, notițe, desen și prezentări</li>
-        </ul>
-        <p>
-        Datorită ecosistemului de aplicații și accesoriilor,
-        iPad poate înlocui cu succes un laptop în multe scenarii.
-        </p>
+          <div class="badges">
+            <span class="badge"><span class="dot"></span> Ecosistem integrat</span>
+            <span class="badge"><span class="dot"></span> Performanță premium</span>
+            <span class="badge"><span class="dot"></span> Suport pe termen lung</span>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <hr>
+    <section class="grid">
+      <article class="product" id="iphone">
+        <div class="media">
+          <div class="imgFrame">
+            <img src="Imagini/1.jpg" alt="iPhone" />
+          </div>
+        </div>
+        <div class="body">
+          <div class="kicker"><span class="line"></span> Smartphone</div>
+          <h2>iPhone</h2>
+          <p>
+            Smartphone Apple cu sistem de operare iOS, cunoscut pentru performanță ridicată,
+            securitate avansată și experiență de utilizare fluidă.
+          </p>
+          <p>
+            iPhone este ideal pentru utilizatori care apreciază calitatea camerei,
+            actualizările software pe termen lung și integrarea cu alte produse Apple.
+          </p>
+          <ul>
+            <li>Exemple: iPhone 12 / 13 / 14 / 15</li>
+            <li>Puncte forte: cameră avansată, performanță ridicată, iOS stabil</li>
+            <li>Actualizări regulate de securitate și funcționalitate</li>
+            <li>Compatibilitate cu Apple Watch, AirPods, Mac și iPad</li>
+          </ul>
+          <p>
+            iPhone este potrivit atât pentru uz personal, cât și profesional,
+            fiind unul dintre cele mai populare smartphone-uri din lume.
+          </p>
+        </div>
+      </article>
 
-    <div style="display:flex; align-items:center; justify-content:center; gap:25px; margin:25px 0;">
-      <img src="Imagini/3.jpg" alt="MacBook" width="200">
-      <div>
-        <h2>MacBook</h2>
-        <p>
-        Laptop Apple cu sistem de operare macOS, recunoscut pentru stabilitate,
-        autonomie mare și performanță excelentă.
-        </p>
-        <p>
-        Modelele cu procesoare Apple Silicon (M1, M2, M3) oferă eficiență energetică ridicată
-        și performanță superioară în aplicații profesionale.
-        </p>
-        <ul>
-          <li>Exemple: MacBook Air (M1/M2/M3), MacBook Pro 14&quot;/16&quot;</li>
-          <li>Puncte forte: autonomie mare, ecran de calitate, performanță</li>
-          <li>Potrivit pentru programare, editare foto-video și business</li>
-          <li>Integrare perfectă cu iPhone și iPad</li>
-        </ul>
-        <p>
-        MacBook este preferat de studenți, profesioniști și creatori de conținut
-        datorită fiabilității și experienței premium.
-        </p>
+      <article class="product" id="ipad">
+        <div class="media">
+          <div class="imgFrame">
+            <img src="Imagini/2.jpg" alt="iPad" />
+          </div>
+        </div>
+        <div class="body">
+          <div class="kicker"><span class="line"></span> Tabletă</div>
+          <h2>iPad</h2>
+          <p>
+            Tableta Apple concepută pentru studiu, muncă și divertisment,
+            oferind un echilibru excelent între performanță și portabilitate.
+          </p>
+          <p>
+            iPad este utilizat frecvent în educație, design, business și divertisment,
+            fiind compatibil cu Apple Pencil și tastaturi dedicate.
+          </p>
+          <ul>
+            <li>Exemple: iPad (10th gen), iPad mini, iPad Air, iPad Pro</li>
+            <li>Puncte forte: ecran de calitate, aplicații optimizate, portabilitate</li>
+            <li>Suport pentru Apple Pencil și multitasking</li>
+            <li>Ideal pentru citit, notițe, desen și prezentări</li>
+          </ul>
+          <p>
+            Datorită ecosistemului de aplicații și accesoriilor,
+            iPad poate înlocui cu succes un laptop în multe scenarii.
+          </p>
+        </div>
+      </article>
+
+      <article class="product" id="macbook">
+        <div class="media">
+          <div class="imgFrame">
+            <img src="Imagini/3.jpg" alt="MacBook" />
+          </div>
+        </div>
+        <div class="body">
+          <div class="kicker"><span class="line"></span> Laptop</div>
+          <h2>MacBook</h2>
+          <p>
+            Laptop Apple cu sistem de operare macOS, recunoscut pentru stabilitate,
+            autonomie mare și performanță excelentă.
+          </p>
+          <p>
+            Modelele cu procesoare Apple Silicon (M1, M2, M3) oferă eficiență energetică ridicată
+            și performanță superioară în aplicații profesionale.
+          </p>
+          <ul>
+            <li>Exemple: MacBook Air (M1/M2/M3), MacBook Pro 14&quot;/16&quot;</li>
+            <li>Puncte forte: autonomie mare, ecran de calitate, performanță</li>
+            <li>Potrivit pentru programare, editare foto-video și business</li>
+            <li>Integrare perfectă cu iPhone și iPad</li>
+          </ul>
+          <p>
+            MacBook este preferat de studenți, profesioniști și creatori de conținut
+            datorită fiabilității și experienței premium.
+          </p>
+        </div>
+      </article>
+
+      <article class="product" id="watch">
+        <div class="media">
+          <div class="imgFrame">
+            <img src="Imagini/4.jpg" alt="Apple Watch" />
+          </div>
+        </div>
+        <div class="body">
+          <div class="kicker"><span class="line"></span> Smartwatch</div>
+          <h2>Apple Watch</h2>
+          <p>
+            Ceas inteligent Apple creat pentru monitorizarea sănătății,
+            activității fizice și gestionarea notificărilor.
+          </p>
+          <p>
+            Apple Watch funcționează împreună cu iPhone-ul și oferă
+            date utile despre ritmul cardiac, somn și activitate zilnică.
+          </p>
+          <ul>
+            <li>Exemple: Series 7 / 8 / 9, SE (2nd gen), Ultra / Ultra 2</li>
+            <li>Puncte forte: monitorizare sănătate, fitness, notificări</li>
+            <li>Funcții pentru sport, alergare și activități outdoor</li>
+            <li>Integrare completă cu aplicațiile Apple</li>
+          </ul>
+          <p>
+            Apple Watch este ideal pentru utilizatorii activi,
+            care doresc un stil de viață mai sănătos și conectat.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section class="footerNav" id="final">
+      <p class="note">Navigare rapidă între pagini</p>
+      <div class="actions">
+        <a class="btn" href="index.html">← Pagina precedentă</a>
+        <a class="btn" href="pagina2.html">Pagina următoare →</a>
       </div>
-    </div>
-
-    <hr>
-
-    <div style="display:flex; align-items:center; justify-content:center; gap:25px; margin:25px 0;">
-      <img src="Imagini/4.jpg" alt="Apple Watch" width="200">
-      <div>
-        <h2>Apple Watch</h2>
-        <p>
-        Ceas inteligent Apple creat pentru monitorizarea sănătății,
-        activității fizice și gestionarea notificărilor.
-        </p>
-        <p>
-        Apple Watch funcționează împreună cu iPhone-ul și oferă
-        date utile despre ritmul cardiac, somn și activitate zilnică.
-        </p>
-        <ul>
-          <li>Exemple: Series 7 / 8 / 9, SE (2nd gen), Ultra / Ultra 2</li>
-          <li>Puncte forte: monitorizare sănătate, fitness, notificări</li>
-          <li>Funcții pentru sport, alergare și activități outdoor</li>
-          <li>Integrare completă cu aplicațiile Apple</li>
-        </ul>
-        <p>
-        Apple Watch este ideal pentru utilizatorii activi,
-        care doresc un stil de viață mai sănătos și conectat.
-        </p>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<a href="index.html">Pagina Precedenta</a>
-<a href="pagina2.html">Pagina Urmatoare</a>
-
+    </section>
+  </main>
 </body>
 </html>
