@@ -1,315 +1,617 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Livrare și Plată</title>
+
+  <style>
+    :root{
+      --bg: #0b0f1a;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.09);
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --muted2: rgba(255,255,255,.60);
+      --accent: #7c5cff;
+      --accent2:#2dd4bf;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 22px;
+      --max: 1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(124,92,255,.35), transparent 55%),
+        radial-gradient(1000px 600px at 85% 0%, rgba(45,212,191,.22), transparent 55%),
+        radial-gradient(900px 600px at 50% 100%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(180deg, #070a12, #0b0f1a 55%, #060814);
+      line-height:1.65;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; display:block; }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(14px);
+      background: rgba(11,15,26,.55);
+      border-bottom:1px solid var(--stroke);
+    }
+    .topbar .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:34px;height:34px;border-radius:12px;
+      background: linear-gradient(135deg, rgba(124,92,255,1), rgba(45,212,191,1));
+      box-shadow: 0 12px 28px rgba(124,92,255,.22);
+    }
+    .nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color:var(--muted);
+      font-size:14px;
+      transition:.2s ease;
+    }
+    .pill:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+    }
+
+    .container{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:26px 18px 46px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+      padding:18px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(700px 300px at 20% 20%, rgba(124,92,255,.22), transparent 55%),
+        radial-gradient(600px 300px at 90% 10%, rgba(45,212,191,.18), transparent 55%);
+      pointer-events:none;
+    }
+    .hero > *{ position:relative; }
+
+    .hero h1{
+      margin:0 0 8px;
+      font-size: clamp(28px, 3.6vw, 44px);
+      line-height:1.12;
+      letter-spacing:-.6px;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width: 60ch;
+    }
+    .hero .badgeRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:99px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 3px rgba(124,92,255,.18);
+    }
+    .heroMedia{
+      border-radius: 18px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      overflow:hidden;
+      min-height: 230px;
+    }
+    .heroMedia img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    .sectionTitle{
+      margin:28px 0 10px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size: 22px;
+      letter-spacing:-.2px;
+    }
+    .sectionTitle p{
+      margin:0;
+      color: var(--muted2);
+      font-size: 14px;
+      max-width: 62ch;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    .card{
+      grid-column: span 6;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr;
+    }
+    .cardInner{
+      padding:16px 16px 14px;
+    }
+    .card h3{
+      margin:0 0 6px;
+      font-size: 18px;
+      letter-spacing:-.2px;
+    }
+    .card p{
+      margin:0 0 10px;
+      color:var(--muted);
+    }
+    .card ul, .card ol{
+      margin:10px 0 0 18px;
+      color: var(--muted);
+      padding:0;
+    }
+    .card li{ margin:6px 0; }
+    .cardMedia{
+      height:240px;
+      border-top:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+    }
+    .cardMedia img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .wide{ grid-column: span 12; }
+    .cardGrid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:0;
+    }
+    .cardGrid .cardInner{ padding:18px; }
+    .cardGrid .cardMedia{
+      height:auto;
+      border-top:0;
+      border-left:1px solid var(--stroke);
+      min-height: 280px;
+    }
+
+    .listPanel{
+      border-radius: var(--radius2);
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      padding:16px 16px 10px;
+      margin-top:14px;
+    }
+    .listPanel ul{
+      margin:10px 0 0 18px;
+      color: var(--muted);
+      padding:0;
+    }
+    .listPanel li{ margin:8px 0; }
+
+    .divider{
+      height:1px;
+      margin:22px 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+      border:0;
+    }
+
+    .ctaRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:18px;
+      padding:14px 16px;
+      border:1px solid var(--stroke);
+      border-radius: var(--radius2);
+      background: linear-gradient(90deg, rgba(124,92,255,.14), rgba(45,212,191,.10));
+    }
+    .ctaRow p{
+      margin:0;
+      color:var(--text);
+      font-weight:650;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      color:var(--text);
+      font-weight:700;
+      transition:.2s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(0,0,0,.28); }
+
+    footer{
+      margin-top:18px;
+      color: var(--muted2);
+      font-size: 13px;
+      padding: 10px 2px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 920px){
+      .hero{ grid-template-columns: 1fr; }
+      .card{ grid-column: span 12; }
+      .cardGrid{ grid-template-columns: 1fr; }
+      .cardGrid .cardMedia{ border-left:0; border-top:1px solid var(--stroke); min-height: 230px; }
+      .nav{ display:none; }
+    }
+  </style>
 </head>
+
 <body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>Livrare & Plată</div>
+      </div>
 
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td align="center">
-      <img src="Imagini/20.jpg" width="520"><br><br>
-      <h1>Livrare expres<br>până la 4 ore.</h1>
-      <p align="center">
-        Alegeți varianta de livrare potrivită pentru dvs. – livrare standard, livrare expres sau ridicare din magazin.
-        Comenzile pot fi livrate atât în Chișinău, cât și pe întreg teritoriul Republicii Moldova.
-      </p>
-    </td>
-  </tr>
-</table>
+      <nav class="nav" aria-label="Navigare">
+        <a class="pill" href="#livrare">Livrare</a>
+        <a class="pill" href="#ridicare">Ridicare</a>
+        <a class="pill" href="#plata">Plată</a>
+        <a class="pill" href="#utile">Info utile</a>
+      </nav>
+    </div>
+  </header>
 
-<hr>
+  <main class="container">
 
-<h2 align="center">Livrarea comenzilor</h2>
-<p align="center">
-Aveți posibilitatea să alegeți metoda de livrare potrivită: standard, expres sau ridicare din magazin.
-Livrarea se efectuează pe întreg teritoriul Republicii Moldova.
-</p>
+    <section class="hero" id="top">
+      <div>
+        <h1>Livrare expres<br>până la 4 ore.</h1>
+        <p>
+          Alegeți varianta de livrare potrivită pentru dvs. – livrare standard, livrare expres sau ridicare din magazin.
+          Comenzile pot fi livrate atât în Chișinău, cât și pe întreg teritoriul Republicii Moldova.
+        </p>
 
-<p align="center">
-Înainte de finalizarea comenzii, verificați disponibilitatea produselor și selectați adresa corectă de livrare.
-În funcție de stoc, livrarea poate fi efectuată mai rapid sau poate necesita un termen suplimentar.
-Pentru confortul dvs., puteți urmări statusul comenzii și primi notificări despre pregătirea acesteia.
-</p>
+        <div class="badgeRow" aria-label="Puncte cheie">
+          <span class="badge"><span class="dot"></span> Chișinău: 2–4 ore (expres)</span>
+          <span class="badge"><span class="dot"></span> Moldova: 24–72 ore</span>
+          <span class="badge"><span class="dot"></span> Gratis peste 500 lei</span>
+        </div>
+      </div>
 
-<ul>
-  <li>Livrare standard – în termen de 24–72 ore (în funcție de regiune și disponibilitate).</li>
-  <li>Livrare expres – între 2 și 4 ore în Chișinău (contra cost, unde este disponibil).</li>
-  <li>Ridicare din magazin – gratuit, pe baza confirmării comenzii.</li>
-  <li>Livrare gratuită – pentru comenzi de peste 500 lei (conform condițiilor).</li>
-  <li>Taxe de livrare – aplicabile pentru comenzi sub 500 lei sau pentru opțiuni speciale.</li>
-</ul>
+      <div class="heroMedia">
+        <img src="Imagini/20.jpg" alt="Livrare expres" />
+      </div>
+    </section>
 
-<hr>
+    <div class="sectionTitle" id="livrare">
+      <div>
+        <h2>Livrarea comenzilor</h2>
+        <p>
+          Aveți posibilitatea să alegeți metoda de livrare potrivită: standard, expres sau ridicare din magazin.
+          Livrarea se efectuează pe întreg teritoriul Republicii Moldova.
+        </p>
+      </div>
+    </div>
 
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td width="50%" align="center">
-      <img src="Imagini/12.jpg" width="450">
-    </td>
-    <td width="50%">
-      <h2>Ridicarea din magazinele iSpace</h2>
-      <p>
-      Puteți ridica produsele direct din magazinele iSpace.
-      După confirmarea comenzii, produsul este rezervat timp de 72 de ore.
-      </p>
-      <p>
-      Procesarea comenzilor are loc zilnic între orele 09:00 – 20:00.
-      </p>
-
-      <p>
-      Pentru ridicare, este recomandat să aveți la dvs. numărul comenzii și un act de identitate.
-      Dacă comanda este făcută pe numele altei persoane, ridicarea se poate face doar cu acordul și datele corecte ale destinatarului.
+    <div class="listPanel">
+      <p style="margin:0;color:var(--muted);">
+        Înainte de finalizarea comenzii, verificați disponibilitatea produselor și selectați adresa corectă de livrare.
+        În funcție de stoc, livrarea poate fi efectuată mai rapid sau poate necesita un termen suplimentar.
+        Pentru confortul dvs., puteți urmări statusul comenzii și primi notificări despre pregătirea acesteia.
       </p>
 
       <ul>
-        <li>Ridicare gratuită din magazin.</li>
-        <li>Confirmare prin telefon/e-mail/SMS (în funcție de sistem).</li>
-        <li>Rezervare produs până la 72 ore după confirmare.</li>
-        <li>Posibilitatea de a verifica produsul la ridicare.</li>
+        <li>Livrare standard – în termen de 24–72 ore (în funcție de regiune și disponibilitate).</li>
+        <li>Livrare expres – între 2 și 4 ore în Chișinău (contra cost, unde este disponibil).</li>
+        <li>Ridicare din magazin – gratuit, pe baza confirmării comenzii.</li>
+        <li>Livrare gratuită – pentru comenzi de peste 500 lei (conform condițiilor).</li>
+        <li>Taxe de livrare – aplicabile pentru comenzi sub 500 lei sau pentru opțiuni speciale.</li>
       </ul>
-    </td>
-  </tr>
-</table>
+    </div>
 
-<hr>
+    <hr class="divider" />
 
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td width="50%">
-      <h2>Livrare prin curier în Chișinău</h2>
-      <p>
-      Livrarea se face în termen de 24 de ore dacă produsele sunt în stoc.
-      </p>
-      <p>
-      Livrare gratuită pentru comenzi de peste 500 lei.
-      Livrare expres: 2–4 ore, contra unei taxe de 150 lei.
-      </p>
+    <section class="cards">
+      <article class="card wide cardGrid" id="ridicare">
+        <div class="cardInner">
+          <h3>Ridicarea din magazinele iSpace</h3>
+          <p>
+            Puteți ridica produsele direct din magazinele iSpace. După confirmarea comenzii, produsul este rezervat timp de 72 de ore.
+          </p>
+          <p>
+            Procesarea comenzilor are loc zilnic între orele 09:00 – 20:00.
+          </p>
+          <p>
+            Pentru ridicare, este recomandat să aveți la dvs. numărul comenzii și un act de identitate.
+            Dacă comanda este făcută pe numele altei persoane, ridicarea se poate face doar cu acordul și datele corecte ale destinatarului.
+          </p>
+          <ul>
+            <li>Ridicare gratuită din magazin.</li>
+            <li>Confirmare prin telefon/e-mail/SMS (în funcție de sistem).</li>
+            <li>Rezervare produs până la 72 ore după confirmare.</li>
+            <li>Posibilitatea de a verifica produsul la ridicare.</li>
+          </ul>
+        </div>
+        <div class="cardMedia">
+          <img src="Imagini/12.jpg" alt="Ridicare din magazin" />
+        </div>
+      </article>
 
-      <p>
-      Curierul vă poate contacta înainte de livrare pentru confirmarea adresei și a orei aproximative.
-      Vă rugăm să verificați ca numărul de telefon introdus în comandă să fie corect.
-      </p>
+      <article class="card wide cardGrid">
+        <div class="cardInner">
+          <h3>Livrare prin curier în Chișinău</h3>
+          <p>Livrarea se face în termen de 24 de ore dacă produsele sunt în stoc.</p>
+          <p>
+            Livrare gratuită pentru comenzi de peste 500 lei. Livrare expres: 2–4 ore, contra unei taxe de 150 lei.
+          </p>
+          <p>
+            Curierul vă poate contacta înainte de livrare pentru confirmarea adresei și a orei aproximative.
+            Vă rugăm să verificați ca numărul de telefon introdus în comandă să fie corect.
+          </p>
+          <ul>
+            <li>Livrare standard Chișinău: de regulă în 24 ore.</li>
+            <li>Livrare expres Chișinău: 2–4 ore (în intervalele disponibile).</li>
+            <li>Livrare gratuită pentru comenzi peste 500 lei.</li>
+            <li>Taxă livrare expres: 150 lei.</li>
+            <li>Comenzile făcute în weekend pot fi livrate în următoarea zi lucrătoare.</li>
+          </ul>
+        </div>
+        <div class="cardMedia">
+          <img src="Imagini/13.jpg" alt="Livrare curier Chișinău" />
+        </div>
+      </article>
 
-      <ul>
-        <li>Livrare standard Chișinău: de regulă în 24 ore.</li>
-        <li>Livrare expres Chișinău: 2–4 ore (în intervalele disponibile).</li>
-        <li>Livrare gratuită pentru comenzi peste 500 lei.</li>
-        <li>Taxă livrare expres: 150 lei.</li>
-        <li>Comenzile făcute în weekend pot fi livrate în următoarea zi lucrătoare.</li>
-      </ul>
-    </td>
-    <td width="50%" align="center">
-      <img src="Imagini/13.jpg" width="450">
-    </td>
-  </tr>
-</table>
+      <article class="card wide cardGrid">
+        <div class="cardInner">
+          <h3>Livrare pe întreg teritoriul Republicii Moldova</h3>
+          <p>Produsele sunt expediate în ziua următoare efectuării plății.</p>
+          <p>
+            Livrare gratuită pentru comenzi peste 500 lei. Pentru comenzi sub 500 lei, taxa este de 50 lei.
+          </p>
+          <p>
+            Timpul de livrare poate varia în funcție de localitate, condiții meteo și disponibilitatea curierului.
+            În majoritatea cazurilor, livrarea are loc în intervalul 24–72 ore.
+          </p>
+          <ul>
+            <li>Livrare gratuită pentru comenzi peste 500 lei.</li>
+            <li>Taxă livrare pentru comenzi sub 500 lei: 50 lei.</li>
+            <li>Termen estimativ: 24–72 ore.</li>
+            <li>Adresa trebuie completată corect (stradă, număr, apartament, localitate).</li>
+          </ul>
+        </div>
+        <div class="cardMedia">
+          <img src="Imagini/14.jpg" alt="Livrare în Republica Moldova" />
+        </div>
+      </article>
+    </section>
 
-<hr>
+    <hr class="divider" />
 
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td width="50%" align="center">
-      <img src="Imagini/14.jpg" width="450">
-    </td>
-    <td width="50%">
-      <h2>Livrare pe întreg teritoriul Republicii Moldova</h2>
-      <p>
-      Produsele sunt expediate în ziua următoare efectuării plății.
-      </p>
-      <p>
-      Livrare gratuită pentru comenzi peste 500 lei.
-      Pentru comenzi sub 500 lei, taxa este de 50 lei.
-      </p>
+    <div class="sectionTitle" id="plata">
+      <div>
+        <h2>Metode de plată</h2>
+        <p>Alegeți metoda potrivită – numerar, card, online sau finanțare. Informațiile sunt prezentate clar pe fiecare opțiune.</p>
+      </div>
+    </div>
 
-      <p>
-      Timpul de livrare poate varia în funcție de localitate, condiții meteo și disponibilitatea curierului.
-      În majoritatea cazurilor, livrarea are loc în intervalul 24–72 ore.
-      </p>
+    <section class="cards">
+      <article class="card">
+        <div class="cardInner">
+          <h3>Plata în numerar</h3>
+          <p>Plata se acceptă exclusiv în lei moldovenești, la livrare sau ridicare din magazin.</p>
+          <p>
+            Persoane fizice: până la 100 000 lei.<br />
+            Persoane juridice: până la 10 000 lei.
+          </p>
+          <p>
+            La plata în numerar, verificați suma și solicitați bonul fiscal sau confirmarea plății.
+            Pentru comenzi ridicate din magazin, plata se face la casă.
+          </p>
+          <ul>
+            <li>Monedă acceptată: MDL.</li>
+            <li>Plată la livrare sau la ridicare.</li>
+            <li>Solicitați confirmare/bon fiscal.</li>
+          </ul>
+        </div>
+        <div class="cardMedia">
+          <img src="Imagini/15.jpg" alt="Plata în numerar" />
+        </div>
+      </article>
 
-      <ul>
-        <li>Livrare gratuită pentru comenzi peste 500 lei.</li>
-        <li>Taxă livrare pentru comenzi sub 500 lei: 50 lei.</li>
-        <li>Termen estimativ: 24–72 ore.</li>
-        <li>Adresa trebuie completată corect (stradă, număr, apartament, localitate).</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+      <article class="card">
+        <div class="cardInner">
+          <h3>Plata cu cardul bancar</h3>
+          <p>Plata cu cardul este disponibilă online, la livrare sau la punctele de ridicare.</p>
+          <p>Produsele sunt livrate în termen de până la o zi, în funcție de disponibilitate.</p>
+          <p>
+            La livrare, plata cu cardul se efectuează prin terminal mobil (dacă este disponibil).
+            Pentru ridicarea din magazin, plata cu cardul se face la casa magazinului.
+          </p>
+          <ul>
+            <li>Plată cu cardul pe site.</li>
+            <li>Plată cu cardul la livrare (terminal mobil, dacă este disponibil).</li>
+            <li>Plată cu cardul la ridicare din magazin.</li>
+            <li>Verificați limita cardului înainte de achitare.</li>
+          </ul>
+        </div>
+        <div class="cardMedia">
+          <img src="Imagini/16.jpg" alt="Plata cu cardul" />
+        </div>
+      </article>
 
-<hr>
+      <article class="card">
+        <div class="cardInner">
+          <h3>Plata online: Visa, MasterCard, Apple Pay, Google Pay</h3>
+          <p>Plățile online sunt securizate și se efectuează în lei moldovenești (MDL).</p>
+          <p>iSpace nu stochează datele cardului dumneavoastră.</p>
+          <p>
+            După finalizarea comenzii, veți fi redirecționat către o pagină securizată pentru achitare.
+            Este posibil să vi se ceară confirmarea plății prin SMS sau aplicația băncii (3D Secure).
+          </p>
+          <ul>
+            <li>Acceptă Visa și MasterCard emise de orice bancă.</li>
+            <li>Suportă Apple Pay și Google Pay (dacă sunt activate).</li>
+            <li>Tranzacțiile sunt securizate (confirmare 3D Secure).</li>
+            <li>Nu se percep comisioane suplimentare din partea magazinului.</li>
+          </ul>
+        </div>
+        <div class="cardMedia">
+          <img src="Imagini/17.jpg" alt="Plata online" />
+        </div>
+      </article>
 
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td width="50%">
-      <h2>Plata în numerar</h2>
-      <p>
-      Plata se acceptă exclusiv în lei moldovenești, la livrare sau ridicare din magazin.
-      </p>
-      <p>
-      Persoane fizice: până la 100 000 lei.<br>
-      Persoane juridice: până la 10 000 lei.
-      </p>
+      <article class="card">
+        <div class="cardInner">
+          <h3>Rate sau Credit</h3>
+          <p>Rate 0% pentru iPhone, MacBook, iPad – fără costuri suplimentare.</p>
+          <p>Credit standard: termen între 6 și 48 de luni.</p>
+          <p>
+            Pentru rate sau credit, pot fi necesare documente suplimentare și aprobarea instituției financiare.
+            Condițiile finale depind de bancă/partener și de suma totală a achiziției.
+          </p>
+          <ul>
+            <li>Rate 0%: 4–10 rate (în funcție de ofertă).</li>
+            <li>Credit standard: 6–48 luni.</li>
+            <li>Posibilitate de a alege perioada de finanțare.</li>
+            <li>Confirmarea se face conform regulilor partenerului financiar.</li>
+          </ul>
+        </div>
+        <div class="cardMedia">
+          <img src="Imagini/18.jpg" alt="Rate sau credit" />
+        </div>
+      </article>
 
-      <p>
-      La plata în numerar, verificați suma și solicitați bonul fiscal sau confirmarea plății.
-      Pentru comenzi ridicate din magazin, plata se face la casă.
-      </p>
+      <article class="card wide cardGrid">
+        <div class="cardInner">
+          <h3>Plata fără numerar (transfer bancar)</h3>
+          <ol>
+            <li>Adăugați produsul în coș</li>
+            <li>Primiți factura proformă pe e-mail</li>
+            <li>Achitați factura în 3 zile lucrătoare</li>
+            <li>Trimiteți confirmarea plății (dacă este necesar)</li>
+            <li>Produsele sunt livrate după confirmarea plății</li>
+          </ol>
 
-      <ul>
-        <li>Monedă acceptată: MDL.</li>
-        <li>Plată la livrare sau la ridicare.</li>
-        <li>Solicitați confirmare/bon fiscal.</li>
-      </ul>
-    </td>
-    <td width="50%" align="center">
-      <img src="Imagini/15.jpg" width="450">
-    </td>
-  </tr>
-</table>
+          <p>
+            Transferul bancar este recomandat pentru companii și instituții.
+            În funcție de bancă, confirmarea plății poate dura 1–2 zile lucrătoare.
+          </p>
 
-<hr>
+          <ul>
+            <li>Potrivit pentru persoane juridice.</li>
+            <li>Necesită factură proformă.</li>
+            <li>Confirmarea plății poate dura până la 48 ore.</li>
+            <li>Livrarea începe după confirmarea achitării.</li>
+          </ul>
+        </div>
+        <div class="cardMedia">
+          <img src="Imagini/19.jpg" alt="Transfer bancar" />
+        </div>
+      </article>
+    </section>
 
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td width="50%" align="center">
-      <img src="Imagini/16.jpg" width="450">
-    </td>
-    <td width="50%">
-      <h2>Plata cu cardul bancar</h2>
-      <p>
-      Plata cu cardul este disponibilă online, la livrare sau la punctele de ridicare.
-      </p>
-      <p>
-      Produsele sunt livrate în termen de până la o zi, în funcție de disponibilitate.
-      </p>
+    <hr class="divider" />
 
-      <p>
-      La livrare, plata cu cardul se efectuează prin terminal mobil (dacă este disponibil).
-      Pentru ridicarea din magazin, plata cu cardul se face la casa magazinului.
-      </p>
+    <section id="utile">
+      <div class="sectionTitle">
+        <div>
+          <h2>Informații utile</h2>
+          <p>Recomandări rapide pentru o livrare fără probleme și o achitare sigură.</p>
+        </div>
+      </div>
 
-      <ul>
-        <li>Plată cu cardul pe site.</li>
-        <li>Plată cu cardul la livrare (terminal mobil, dacă este disponibil).</li>
-        <li>Plată cu cardul la ridicare din magazin.</li>
-        <li>Verificați limita cardului înainte de achitare.</li>
-      </ul>
-    </td>
-  </tr>
-</table>
+      <div class="listPanel">
+        <ul>
+          <li>Verificați corectitudinea numărului de telefon și a adresei înainte de finalizarea comenzii.</li>
+          <li>Pentru livrare rapidă, alegeți metodele de plată online sau card.</li>
+          <li>În caz de întrebări, păstrați numărul comenzii pentru a comunica rapid cu suportul.</li>
+          <li>Termenele de livrare pot varia în funcție de stoc și de localitate.</li>
+          <li>La recepție, verificați integritatea coletului și a produselor.</li>
+        </ul>
+      </div>
 
-<hr>
+      <div class="ctaRow">
+        <p>Mulțumim că ați ales magazinul nostru! Vă dorim cumpărături plăcute și livrare rapidă.</p>
+        <a class="btn" href="pagina3.html">← Pagina precedentă</a>
+      </div>
 
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td width="50%">
-      <h2>Plata online: Visa, MasterCard, Apple Pay, Google Pay</h2>
-      <p>
-      Plățile online sunt securizate și se efectuează în lei moldovenești (MDL).
-      </p>
-      <p>
-      iSpace nu stochează datele cardului dumneavoastră.
-      </p>
+      <footer>
+        © <span>2026</span> • Livrare & Plată • Design modern (HTML + CSS)
+      </footer>
+    </section>
 
-      <p>
-      După finalizarea comenzii, veți fi redirecționat către o pagină securizată pentru achitare.
-      Este posibil să vi se ceară confirmarea plății prin SMS sau aplicația băncii (3D Secure).
-      </p>
-
-      <ul>
-        <li>Acceptă Visa și MasterCard emise de orice bancă.</li>
-        <li>Suportă Apple Pay și Google Pay (dacă sunt activate).</li>
-        <li>Tranzacțiile sunt securizate (confirmare 3D Secure).</li>
-        <li>Nu se percep comisioane suplimentare din partea magazinului.</li>
-      </ul>
-    </td>
-    <td width="50%" align="center">
-      <img src="Imagini/17.jpg" width="450">
-    </td>
-  </tr>
-</table>
-
-<hr>
-
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td width="50%" align="center">
-      <img src="Imagini/18.jpg" width="450">
-    </td>
-    <td width="50%">
-      <h2>Rate sau Credit</h2>
-      <p>
-      Rate 0% pentru iPhone, MacBook, iPad – fără costuri suplimentare.
-      </p>
-      <p>
-      Credit standard: termen între 6 și 48 de luni.
-      </p>
-
-      <p>
-      Pentru rate sau credit, pot fi necesare documente suplimentare și aprobarea instituției financiare.
-      Condițiile finale depind de bancă/partener și de suma totală a achiziției.
-      </p>
-
-      <ul>
-        <li>Rate 0%: 4–10 rate (în funcție de ofertă).</li>
-        <li>Credit standard: 6–48 luni.</li>
-        <li>Posibilitate de a alege perioada de finanțare.</li>
-        <li>Confirmarea se face conform regulilor partenerului financiar.</li>
-      </ul>
-    </td>
-  </tr>
-</table>
-
-<hr>
-
-<table width="100%" cellpadding="20" cellspacing="0" border="0">
-  <tr>
-    <td width="50%">
-      <h2>Plata fără numerar (transfer bancar)</h2>
-      <ol>
-        <li>Adăugați produsul în coș</li>
-        <li>Primiți factura proformă pe e-mail</li>
-        <li>Achitați factura în 3 zile lucrătoare</li>
-        <li>Trimiteți confirmarea plății (dacă este necesar)</li>
-        <li>Produsele sunt livrate după confirmarea plății</li>
-      </ol>
-
-      <p>
-      Transferul bancar este recomandat pentru companii și instituții.
-      În funcție de bancă, confirmarea plății poate dura 1–2 zile lucrătoare.
-      </p>
-
-      <ul>
-        <li>Potrivit pentru persoane juridice.</li>
-        <li>Necesită factură proformă.</li>
-        <li>Confirmarea plății poate dura până la 48 ore.</li>
-        <li>Livrarea începe după confirmarea achitării.</li>
-      </ul>
-    </td>
-    <td width="50%" align="center">
-      <img src="Imagini/19.jpg" width="450">
-    </td>
-  </tr>
-</table>
-
-<hr>
-
-<h2 align="center">Informații utile</h2>
-<ul>
-  <li>Verificați corectitudinea numărului de telefon și a adresei înainte de finalizarea comenzii.</li>
-  <li>Pentru livrare rapidă, alegeți metodele de plată online sau card.</li>
-  <li>În caz de întrebări, păstrați numărul comenzii pentru a comunica rapid cu suportul.</li>
-  <li>Termenele de livrare pot varia în funcție de stoc și de localitate.</li>
-  <li>La recepție, verificați integritatea coletului și a produselor.</li>
-</ul>
-
-<p align="center">
-Mulțumim că ați ales magazinul nostru! Vă dorim cumpărături plăcute și livrare rapidă.
-</p>
-
-<a href="pagina3.html">Pagina Precedenta</a>
-
+  </main>
 </body>
 </html>
