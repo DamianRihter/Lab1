@@ -285,7 +285,6 @@ img{ max-width:100%; display:block; }
   .product{ grid-template-columns: 1fr; }
   .media .imgFrame{ height: 230px; }
 }
-/* ===== GLOBAL NAV (adăugat) ===== */
 .global-nav{
   width:100%;
   background: rgba(11,15,26,0.95);
